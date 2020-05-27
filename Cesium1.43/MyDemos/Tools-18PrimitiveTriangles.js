@@ -93,12 +93,10 @@ var PrimitiveTriangles= (
         }
 
         function CreateAppearence(fs, vs) {
-            return new Cesium.Appearance({         
-                renderState: {
-                    blending: Cesium.BlendingState.PRE_MULTIPLIED_ALPHA_BLEND,  
-                    depthTest: { enabled: true }, 
-                    depthMask: true,
-                    //lineWidth: 4.0
+            return new Cesium.Appearance({
+                translucent:false,
+                renderState: { 
+                    blending: Cesium.BlendingState.DISABLED,
                 },
                 fragmentShaderSource: fs,
                 vertexShaderSource: vs

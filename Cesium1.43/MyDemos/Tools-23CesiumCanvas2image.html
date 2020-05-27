@@ -7,6 +7,7 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <title>Tools-23CesiumCanvas2image</title>
     <script src="../Cesium/Cesium.js"></script>
+    <script src="./Libs/jquery.min.js"></script>
     <script src="1-2ImageryProvider-WebExtend.js"></script>
     <script src="./Tools-23canvas2image.js" type="text/javascript"></script>
     <style>
@@ -29,12 +30,16 @@
 <body>
     <div id="cesiumContainer" class="fullSize"></div>
     <div id="creditContainer" style="display: none;"></div>
+    <a id="loadimg"></a>
     <div id="menu">
         <p>
             <button onclick="setvisible('position')">定位</button>
         </p>
         <p>
             <button onclick="setvisible('add')">添加</button>
+        </p>
+        <p>
+            <button onclick="setvisible('load')">下载</button>
         </p>
     </div>
     <div id="imgdiv" style="position:absolute;top:10px;left:80px;z-index:9999;border:3px solid red;">
@@ -82,7 +87,6 @@
             destination: Cesium.Cartesian3.fromDegrees(lon, lat, 300000)
         });
 
-        
         function setvisible(value) {
             switch (value) {
                 case 'position':
@@ -96,8 +100,23 @@
                     var image = document.getElementById('image');
                     image.src = genimg.src;
                     break;
+                case 'load':
+                    var canvas = viewer.scene.canvas;
+                    var base64url = canvas.toDataURL('image/png');
+                    var binStr = atob(base64url.split(',')[1]),
+                    len = binStr.length,
+                    arr = new Uint8Array(len);
+                    for (var i = 0; i < len; i++) {
+                        arr[i] = binStr.charCodeAt(i);
+                    }
+                    var triggerDownload = document.getElementById('loadimg');
+                    triggerDownload.download = '0.png';
+                    triggerDownload.href = URL.createObjectURL(new Blob([arr]));
+                    triggerDownload.click();
+                    break;
             }
         }
+
     </script>
 </body>
 </html>
